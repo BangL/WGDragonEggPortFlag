@@ -38,8 +38,7 @@ public class PlayerInteractListener implements Listener {
         // Only handle if the action was a click on a dragon egg
         if (((event.getAction() != Action.RIGHT_CLICK_BLOCK)
                 && (event.getAction() != Action.LEFT_CLICK_BLOCK))
-                || ((event.getClickedBlock().getType() == null)
-                || (event.getClickedBlock().getType() != Material.DRAGON_EGG))) {
+                || (event.getClickedBlock().getType() != Material.DRAGON_EGG)) {
             return;
         }
 
