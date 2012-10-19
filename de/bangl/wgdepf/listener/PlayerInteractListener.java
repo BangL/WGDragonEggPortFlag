@@ -35,15 +35,19 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
 
-        // Only handle if the action was a click on a dragon egg
-        if (((event.getAction() != Action.RIGHT_CLICK_BLOCK)
-                && (event.getAction() != Action.LEFT_CLICK_BLOCK))
-                || (event.getClickedBlock().getType() != Material.DRAGON_EGG)) {
-            return;
-        }
-
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
+
+        // Only handle
+        // if the action was a click on a dragon egg
+        // and the player was no op
+        // and has no permission to build here.
+        if ((event.getClickedBlock().getType() != Material.DRAGON_EGG)
+                || ((event.getAction() != Action.RIGHT_CLICK_BLOCK)
+                && ((event.getAction() != Action.LEFT_CLICK_BLOCK)
+                || (player.isOp() || plugin.getWGP().canBuild(player, block))))) {
+            return;
+        }
 
         // Is blocked?
         if (!plugin.getWGP().getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
