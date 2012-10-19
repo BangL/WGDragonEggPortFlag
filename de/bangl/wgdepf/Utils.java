@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 public class Utils {
 
     public static WGCustomFlagsPlugin getWGCustomFlags(WGDragonEggPortFlagPlugin plugin) {
-        Plugin wgcf = plugin.getServer().getPluginManager().getPlugin("WGCustomFlags");
+        final Plugin wgcf = plugin.getServer().getPluginManager().getPlugin("WGCustomFlags");
         if (wgcf == null || !(wgcf instanceof WGCustomFlagsPlugin)) {
             return null;
         }
@@ -19,7 +19,7 @@ public class Utils {
     }
 
     public static WorldGuardPlugin getWorldGuard(WGDragonEggPortFlagPlugin plugin) {
-        Plugin wg = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+        final Plugin wg = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
         if (wg == null || !(wg instanceof WorldGuardPlugin)) {
             return null;
         }

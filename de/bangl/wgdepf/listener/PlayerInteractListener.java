@@ -1,5 +1,6 @@
 package de.bangl.wgdepf.listener;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import de.bangl.wgdepf.WGDragonEggPortFlagPlugin;
 import org.bukkit.ChatColor;
@@ -35,24 +36,24 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
 
-        Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
+        final Player player = event.getPlayer();
+        final Block block = event.getClickedBlock();
+        final Action action = event.getAction();
+        final WorldGuardPlugin wgp = plugin.getWGP();
 
-        // Only handle
-        // if the action was a click on a dragon egg
+        // Block if the action is
+        // in a denied region
+        // and the action was a right or left click
+        // on a dragon egg
         // and the player was no op
         // and has no permission to build here.
-        if ((event.getClickedBlock().getType() != Material.DRAGON_EGG)
-                || ((event.getAction() != Action.RIGHT_CLICK_BLOCK)
-                && ((event.getAction() != Action.LEFT_CLICK_BLOCK)
-                || (player.isOp() || plugin.getWGP().canBuild(player, block))))) {
-            return;
-        }
-
-        // Is blocked?
-        if (!plugin.getWGP().getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
-            || !plugin.getWGP().canBuild(player, block)) {
-            String msg = this.plugin.getConfig().getString("messages.blocked");
+        if (!wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
+                && (action == Action.RIGHT_CLICK_BLOCK
+                || action == Action.LEFT_CLICK_BLOCK)
+                && block.getType() == Material.DRAGON_EGG
+                && !player.isOp()
+                && !wgp.canBuild(player, block)) {
+            final String msg = this.plugin.getConfig().getString("messages.blocked");
             player.sendMessage(ChatColor.RED + msg);
             event.setCancelled(true);
         }
