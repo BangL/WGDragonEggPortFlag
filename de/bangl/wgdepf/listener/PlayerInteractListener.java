@@ -36,27 +36,30 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
 
-        final Player player = event.getPlayer();
-        final Block block = event.getClickedBlock();
-        final Action action = event.getAction();
-        final WorldGuardPlugin wgp = plugin.getWGP();
-
-        // Block if the action is
-        // in a denied region
-        // and the action was a right or left click
-        // on a dragon egg
-        // and the player was no op
-        // and has no permission to build here.
-        if (wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).getFlag(FLAG_DRAGON_EGG_PORT) != null) {
-            if (!wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
+        Block block = event.getClickedBlock();
+        if (block != null) {
+            Action action = event.getAction();
+            if (block.getType() == Material.DRAGON_EGG
                     && (action == Action.RIGHT_CLICK_BLOCK
-                    || action == Action.LEFT_CLICK_BLOCK)
-                    && block.getType() == Material.DRAGON_EGG
-                    && !player.isOp()
-                    && !wgp.canBuild(player, block)) {
-                final String msg = this.plugin.getConfig().getString("messages.blocked");
-                player.sendMessage(ChatColor.RED + msg);
-                event.setCancelled(true);
+                    || action == Action.LEFT_CLICK_BLOCK)) {
+
+                Player player = event.getPlayer();
+                WorldGuardPlugin wgp = plugin.getWGP();
+                Boolean allows = wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT);
+                
+                // Block if the action is
+                // in a denied region
+                // and the action was a right or left click
+                // on a dragon egg
+                // and the player was no op
+                // and has no permission to build here.
+                if (!allows
+                        && !player.isOp()
+                        && !wgp.canBuild(player, block)) {
+                    final String msg = this.plugin.getConfig().getString("messages.blocked");
+                    player.sendMessage(ChatColor.RED + msg);
+                    event.setCancelled(true);
+                }
             }
         }
     }
