@@ -47,15 +47,17 @@ public class PlayerInteractListener implements Listener {
         // on a dragon egg
         // and the player was no op
         // and has no permission to build here.
-        if (!wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
-                && (action == Action.RIGHT_CLICK_BLOCK
-                || action == Action.LEFT_CLICK_BLOCK)
-                && block.getType() == Material.DRAGON_EGG
-                && !player.isOp()
-                && !wgp.canBuild(player, block)) {
-            final String msg = this.plugin.getConfig().getString("messages.blocked");
-            player.sendMessage(ChatColor.RED + msg);
-            event.setCancelled(true);
+        if (wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).getFlag(FLAG_DRAGON_EGG_PORT) != null) {
+            if (!wgp.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).allows(FLAG_DRAGON_EGG_PORT)
+                    && (action == Action.RIGHT_CLICK_BLOCK
+                    || action == Action.LEFT_CLICK_BLOCK)
+                    && block.getType() == Material.DRAGON_EGG
+                    && !player.isOp()
+                    && !wgp.canBuild(player, block)) {
+                final String msg = this.plugin.getConfig().getString("messages.blocked");
+                player.sendMessage(ChatColor.RED + msg);
+                event.setCancelled(true);
+            }
         }
     }
 }
