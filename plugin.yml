@@ -1,6 +1,8 @@
 name: WGDragonEggPortFlag
+main: de.bangl.wgdepf.WGDragonEggPortFlagPlugin
+description: WorldGuard extension to deny porting of dragon eggs in specific regions.
 version: 0.3
-description: '"WorldGuard" extension to block porting of dragon eggs in specific regions.'
+
 authors: [ BangL ]
 depend: [ WorldGuard, WGCustomFlags ]
-main: de.bangl.wgdepf.WGDragonEggPortFlagPlugin
+softdepend: [ WorldEdit ]
