@@ -67,7 +67,7 @@ public class WGDragonEggPortFlagPlugin extends JavaPlugin {
         this.pluginWorldGuard = null;
         this.listenerPlayerInteract = null;
 
-        saveConfig();
+        //saveConfig();
     }
 
 }
